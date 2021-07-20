@@ -3,16 +3,15 @@ package datastruct.myutil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
  * @version 1.0
  * @Description: TODO
  * @Author RZeng
- * @date 2021/7/19 14:51
+ * @date 2021/7/20 8:25
  */
-public class MyLinkedList<E> implements List<E> {
+public class MyCirclyLinkList<E> implements List<E> {
 
     /**
      * 构造内部类
@@ -26,7 +25,7 @@ public class MyLinkedList<E> implements List<E> {
         //        Node<E> prev;
         Node(E data) {
             this.data = data;
-            this.next = null;
+            this.next = this;
         }
     }
 
@@ -38,7 +37,7 @@ public class MyLinkedList<E> implements List<E> {
     /**
      * 头节点的初始化
      */
-    public MyLinkedList() {
+    public MyCirclyLinkList() {
         //无头结点
 //        this.linkList = null;
         //有头节点
@@ -49,7 +48,7 @@ public class MyLinkedList<E> implements List<E> {
     public int size() {
         Node<E> ptr = this.linkList.next;
         int i = 0;
-        while (ptr != null) {
+        while (ptr != this.linkList) {
             ptr = ptr.next;
             i++;
         }
@@ -69,48 +68,13 @@ public class MyLinkedList<E> implements List<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new Itr<E>();
-    }
-
-    private class Itr<E> implements Iterator<E> {
-        Node nextElem = linkList.next;
-
-        @Override
-        public void remove() {
-
-        }
-
-        @Override
-        public void forEachRemaining(Consumer action) {
-
-        }
-
-        @Override
-        public boolean hasNext() {
-            return nextElem != null;
-        }
-
-        @Override
-        public E next() {
-            E data = (E) nextElem.data;
-            nextElem = nextElem.next;
-            return data;
-        }
+        return null;
     }
 
     @NotNull
     @Override
     public Object[] toArray() {
-        int size = this.size();
-        if (size == 0) return null;
-        Object[] o = new Object[size];
-        Node<E> ptr = linkList.next;
-
-        for (int i = 0; i < size; i++) {
-            o[i] = ptr.data;
-            ptr = ptr.next;
-        }
-        return o;
+        return new Object[0];
     }
 
     @NotNull
@@ -139,10 +103,7 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public boolean containsAll(@NotNull Collection<?> c) {
-        for (Object o : c) {
-            if (!contains(o)) return false;
-        }
-        return true;
+        return false;
     }
 
     @Override
@@ -230,11 +191,11 @@ public class MyLinkedList<E> implements List<E> {
         //确保0号节点的删除
         Node<E> ptr = this.linkList;
         int i = 0;
-        while (ptr.next != null && i < index) {
+        while (ptr != null && i < index) {
             i++;
             ptr = ptr.next;
         }
-        if (ptr.next == null || index < i) return null;
+        if (ptr == null || index < i) return null;
         Node<E> newPtr = ptr.next;
         ptr.next = newPtr.next;
         return newPtr.data;
@@ -278,6 +239,5 @@ public class MyLinkedList<E> implements List<E> {
     public Spliterator<E> spliterator() {
         return null;
     }
-
 
 }

@@ -1,19 +1,16 @@
 package datastruct.myutil;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
+import java.util.Iterator;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+
 
 /**
  * @version 1.0
  * @Description: TODO
  * @Author RZeng
- * @date 2021/7/19 8:28
+ * @date 2021/7/20 14:43
  */
-
-public class MyArrayList<E> implements List<E> {
+public class MyArrayStack<E> implements MyStack<E>,Iterable<E>{
     /**
      * 数组首地址
      */
@@ -30,7 +27,7 @@ public class MyArrayList<E> implements List<E> {
     /**
      * 构造函数，初始化数组
      */
-    public MyArrayList() {
+    public MyArrayStack() {
         elem = new Object[maxSize];
         size = 0;
     }
@@ -43,38 +40,29 @@ public class MyArrayList<E> implements List<E> {
         elem = el;
     }
 
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-
+    public E pop(){
+        if(isEmpty()) return null;
+        size--;
+        return (E) elem[size];
     }
 
-    @Override
-    public void sort(Comparator<? super E> c) {
-
+    public E getTop(){
+        if(isEmpty()) return null;
+        return (E) elem[size-1];
     }
-
-    @Override
-    public Spliterator<E> spliterator() {
-        return null;
-    }
-
-    @Override
     public int size() {
         return this.size;
     }
 
-    @Override
     public boolean isEmpty() {
         return this.size == 0;
     }
 
-    @Override
+
     public boolean contains(Object o) {
         return this.indexOf(o) != -1;
     }
 
-    @NotNull
-    @Override
     public Iterator<E> iterator() {
         return new Itr<E>();
     }
@@ -82,29 +70,27 @@ public class MyArrayList<E> implements List<E> {
     private class Itr<E> implements Iterator<E> {
         int nextElem = 0;
 
-        @Override
+
         public void remove() {
 
         }
 
-        @Override
+
         public void forEachRemaining(Consumer action) {
 
         }
 
-        @Override
+
         public boolean hasNext() {
             return nextElem < size;
         }
 
-        @Override
+
         public E next() {
             return (E) elem[nextElem++];
         }
     }
 
-    @NotNull
-    @Override
     public Object[] toArray() {
         if (size == 0) return null;
         Object[] o = new Object[size];
@@ -114,64 +100,23 @@ public class MyArrayList<E> implements List<E> {
         return o;
     }
 
-    @NotNull
-    @Override
-    public <T> T[] toArray(@NotNull T[] a) {
-        return null;
-    }
-
-    @Override
-    public boolean add(E e) {
+    public boolean push(E e) {
         if (this.size == this.maxSize) reSize();
         elem[size++] = e;
-        return false;
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(@NotNull Collection<?> c) {
-        for (Object o : c) {
-            if (!this.contains(o)) return false;
-        }
         return true;
     }
 
-    @Override
-    public boolean addAll(@NotNull Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(int index, @NotNull Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(@NotNull Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(@NotNull Collection<?> c) {
-        return false;
-    }
-
-    @Override
     public void clear() {
         this.size = 0;
     }
 
-    @Override
+
     public E get(int index) {
         if (index < 0 || index >= this.size) return null;
         return (E) elem[index];
     }
 
-    @Override
+
     public E set(int index, E element) {
         if (index < 0 || index >= this.size) return null;
         E element1 = (E) elem[index];
@@ -179,7 +124,7 @@ public class MyArrayList<E> implements List<E> {
         return element1;
     }
 
-    @Override
+
     public void add(int index, E element) {
     }
 
@@ -204,7 +149,7 @@ public class MyArrayList<E> implements List<E> {
         return true;
     }
 
-    @Override
+
     public E remove(int index) {
         if (index < 0 || index >= this.size) return null;
         E elem1 = (E) elem[index];
@@ -217,34 +162,11 @@ public class MyArrayList<E> implements List<E> {
         return elem1;
     }
 
-    @Override
+
     public int indexOf(Object o) {
         for (int i = 0; i < this.size; i++) {
             if (o.equals(elem[i])) return i;
         }
         return -1;
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public ListIterator<E> listIterator() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        return null;
     }
 }

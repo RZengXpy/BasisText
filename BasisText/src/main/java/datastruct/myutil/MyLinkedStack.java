@@ -4,16 +4,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+
 
 /**
  * @version 1.0
  * @Description: TODO
  * @Author RZeng
- * @date 2021/7/19 14:51
+ * @date 2021/7/20 15:50
  */
-public class MyLinkedList<E> implements List<E> {
 
+public class MyLinkedStack<E> implements MyStack<E>,Iterable<E> {
     /**
      * 构造内部类
      *
@@ -38,14 +38,14 @@ public class MyLinkedList<E> implements List<E> {
     /**
      * 头节点的初始化
      */
-    public MyLinkedList() {
+    public MyLinkedStack() {
         //无头结点
 //        this.linkList = null;
         //有头节点
         this.linkList = new Node<E>(null);
     }
 
-    @Override
+
     public int size() {
         Node<E> ptr = this.linkList.next;
         int i = 0;
@@ -56,18 +56,37 @@ public class MyLinkedList<E> implements List<E> {
         return i;
     }
 
-    @Override
+
     public boolean isEmpty() {
         return this.linkList.next == null;
     }
 
     @Override
+    public boolean push(E e) {
+        Node<E> ptr = new Node<>(e);
+        ptr.next=linkList.next;
+        linkList.next=ptr;
+        return true;
+    }
+    @Override
+    public E pop() {
+        if(isEmpty()) return null;
+        Node<E> ptr = linkList.next;
+        linkList.next=ptr.next;
+        ptr.next=null;
+        return (E)ptr.data;
+    }
+
+    @Override
+    public E getTop() {
+        return isEmpty() ? null : (E)linkList.next.data;
+    }
+
     public boolean contains(Object o) {
         return this.indexOf(o) != -1;
     }
 
-    @NotNull
-    @Override
+
     public Iterator<E> iterator() {
         return new Itr<E>();
     }
@@ -75,22 +94,22 @@ public class MyLinkedList<E> implements List<E> {
     private class Itr<E> implements Iterator<E> {
         Node nextElem = linkList.next;
 
-        @Override
+
         public void remove() {
 
         }
 
-        @Override
+
         public void forEachRemaining(Consumer action) {
 
         }
 
-        @Override
+
         public boolean hasNext() {
             return nextElem != null;
         }
 
-        @Override
+
         public E next() {
             E data = (E) nextElem.data;
             nextElem = nextElem.next;
@@ -98,8 +117,7 @@ public class MyLinkedList<E> implements List<E> {
         }
     }
 
-    @NotNull
-    @Override
+
     public Object[] toArray() {
         int size = this.size();
         if (size == 0) return null;
@@ -113,13 +131,7 @@ public class MyLinkedList<E> implements List<E> {
         return o;
     }
 
-    @NotNull
-    @Override
-    public <T> T[] toArray(@NotNull T[] a) {
-        return null;
-    }
 
-    @Override
     public boolean add(E e) {
         Node<E> ptr = this.linkList;
         while (ptr.next != null) {
@@ -129,7 +141,7 @@ public class MyLinkedList<E> implements List<E> {
         return ptr.next != null;
     }
 
-    @Override
+
     public boolean remove(Object o) {
         int index = this.indexOf(o);
         if (index == -1) return false;
@@ -137,7 +149,7 @@ public class MyLinkedList<E> implements List<E> {
         return true;
     }
 
-    @Override
+
     public boolean containsAll(@NotNull Collection<?> c) {
         for (Object o : c) {
             if (!contains(o)) return false;
@@ -145,42 +157,12 @@ public class MyLinkedList<E> implements List<E> {
         return true;
     }
 
-    @Override
-    public boolean addAll(@NotNull Collection<? extends E> c) {
-        return false;
-    }
 
-    @Override
-    public boolean addAll(int index, @NotNull Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(@NotNull Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(@NotNull Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-
-    }
-
-    @Override
-    public void sort(Comparator<? super E> c) {
-
-    }
-
-    @Override
     public void clear() {
         linkList.next = null;
     }
 
-    @Override
+
     public E get(int index) {
         int i = 0;
         Node<E> ptr = this.linkList.next;
@@ -192,7 +174,7 @@ public class MyLinkedList<E> implements List<E> {
         return ptr != null ? ptr.data : null;
     }
 
-    @Override
+
     public E set(int index, E element) {
         Node<E> ptr = this.linkList.next;
         int i = 0;
@@ -206,7 +188,7 @@ public class MyLinkedList<E> implements List<E> {
         return newPte.data;
     }
 
-    @Override
+
     public void add(int index, E element) {
 
     }
@@ -225,7 +207,7 @@ public class MyLinkedList<E> implements List<E> {
 
     }
 
-    @Override
+
     public E remove(int index) {
         //确保0号节点的删除
         Node<E> ptr = this.linkList;
@@ -240,7 +222,7 @@ public class MyLinkedList<E> implements List<E> {
         return newPtr.data;
     }
 
-    @Override
+
     public int indexOf(Object o) {
         Node<E> ptr = this.linkList.next;
         int i = 0;
@@ -249,34 +231,6 @@ public class MyLinkedList<E> implements List<E> {
             ptr = ptr.next;
         }
         return ptr != null ? i : -1;
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public ListIterator<E> listIterator() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        return null;
-    }
-
-    @Override
-    public Spliterator<E> spliterator() {
-        return null;
     }
 
 

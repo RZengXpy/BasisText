@@ -144,7 +144,16 @@ public class MyLinkedListTest<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-
+        Node<E> ptr = start;
+        int i = 0;
+        while (ptr.next != null && i < index) {
+            ptr = ptr.next;
+            i++;
+        }
+        if (ptr == null || i > index) return;
+        Node<E> newPtr = ptr;
+        newPtr.data = element;
+        ptr.next = newPtr;
     }
 
     @Override
@@ -152,11 +161,11 @@ public class MyLinkedListTest<E> implements List<E> {
         //
         Node<E> ptr = this.start;
         int i = 0;
-        while (ptr != null && i < index) {
+        while (ptr.next != null && i < index) {
             i++;
             ptr = ptr.next;
         }
-        if (ptr == null || index < i) return null;
+        if (ptr.next == null || index < i) return null;
         Node<E> newPtr = ptr.next;
         ptr.next = newPtr.next;
         newPtr.next = null;
